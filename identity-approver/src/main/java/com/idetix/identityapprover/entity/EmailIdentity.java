@@ -15,7 +15,7 @@ public class EmailIdentity {
     @Id
     @Column(name = "EMAIL",unique = true,columnDefinition = "VARCHAR(250)")
     private String email;
-    private String ethAddress;
     private String secret;
+    private String ethAddress;
     private Boolean verified;
 }
