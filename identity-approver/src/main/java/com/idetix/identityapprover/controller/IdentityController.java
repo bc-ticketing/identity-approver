@@ -28,9 +28,9 @@ public class IdentityController {
         return service.getIdentities();
     }
 
-    @GetMapping("/identitiy/{id}")
-    public Identity findIdentityById(@PathVariable int id){
-        return service.getIdentityById(id);
+    @GetMapping("/identitiy/{ethAddress}")
+    public Identity findIdentityById(@PathVariable String ethAddress){
+        return service.getIdentityById(ethAddress);
     }
 
     @PutMapping("/update")
@@ -39,8 +39,8 @@ public class IdentityController {
     }
 
     @DeleteMapping("/delete/{ethAdress}")
-    public String deleteIdentity(@PathVariable int id){
-        return service.deleteIdentity(id);
+    public String deleteIdentity(@PathVariable String ethAddress){
+        return service.deleteIdentity(ethAddress);
     }
 
 }

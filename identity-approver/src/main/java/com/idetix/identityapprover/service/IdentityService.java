@@ -25,17 +25,17 @@ public class IdentityService {
         return repository.findAll();
     }
 
-    public Identity getIdentityById(int id){
-        return repository.findById(id).orElse(null);
+    public Identity getIdentityById(String ethAddress){
+        return repository.findById(ethAddress).orElse(null);
     }
 
-    public String deleteIdentity(int id) {
-        repository.deleteById(id);
-        return "Identity removed !!"+ id;
+    public String deleteIdentity(String ethAddress) {
+        repository.deleteById(ethAddress);
+        return "Identity removed !!"+ ethAddress;
     }
 
     public Identity updateIdentity(Identity identity){
-        Identity existingIdentity = repository.findById(identity.getId()).orElse(null);
+        Identity existingIdentity = repository.findById(identity.getEthAddress()).orElse(null);
         existingIdentity.setEmail(identity.getEmail());
         existingIdentity.setHandyNr(identity.getHandyNr());
         existingIdentity.setAirBnB(identity.getAirBnB());

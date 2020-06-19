@@ -1,13 +1,10 @@
 package com.idetix.identityapprover.entity;
 
-        import lombok.AllArgsConstructor;
-        import lombok.Data;
-        import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-        import javax.persistence.Entity;
-        import javax.persistence.GeneratedValue;
-        import javax.persistence.Id;
-        import javax.persistence.Table;
+import javax.persistence.*;
 
 @Data
 @AllArgsConstructor
@@ -16,9 +13,8 @@ package com.idetix.identityapprover.entity;
 @Table(name = "Approved_Identity_TBL")
 public class Identity {
     @Id
-    @GeneratedValue
-    private int id;
-    private String ethAdress;
+    @Column(name = "ETH_ADDRESS",unique = true,columnDefinition = "VARCHAR(42)")
+    private String ethAddress;
     private String email;
     private String handyNr;
     private String airBnB;
