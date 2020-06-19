@@ -29,7 +29,7 @@ public class IdentityController {
     }
 
     @GetMapping("/identitiy/{ethAddress}")
-    public Identity findIdentityById(@PathVariable String ethAddress){
+    public Identity findIdentityById(@PathVariable String ethAddress) {
         return service.getIdentityById(ethAddress);
     }
 
