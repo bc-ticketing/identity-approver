@@ -1,5 +1,7 @@
-package com.idetix.identityapprover.service;
+package com.idetix.identityapprover.service.security;
 
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
 import org.web3j.crypto.ECDSASignature;
 import org.web3j.crypto.Hash;
 import org.web3j.crypto.Keys;
@@ -9,12 +11,14 @@ import org.web3j.utils.Numeric;
 import java.math.BigInteger;
 import java.util.Arrays;
 
-public class SecurityService {
+@Profile("!default")
+@Service
+public class SecurityServiceMockImpl implements SecurityService {
 
 
-    public static final String PERSONAL_MESSAGE_PREFIX = "\u0019Ethereum Signed Message:\n";
+    public final String PERSONAL_MESSAGE_PREFIX = "\u0019Ethereum Signed Message:\n";
 
-    public static boolean verifyAddressFromSignature(String address, String signature, String message)
+    public boolean verifyAddressFromSignature(String address, String signature, String message)
     {
         byte[] signatureBytes = Numeric.hexStringToByteArray(signature);
         String prefix = PERSONAL_MESSAGE_PREFIX + message.length();
@@ -49,11 +53,9 @@ public class SecurityService {
         }
         return match;
     }
-    static String getAlphaNumericString(int n)
+    public String getAlphaNumericString(int n)
     {
-        String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                + "0123456789"
-                + "abcdefghijklmnopqrstuvxyz";
+        String AlphaNumericString = "A";
         StringBuilder sb = new StringBuilder(n);
         for (int i = 0; i < n; i++) {
             int index
