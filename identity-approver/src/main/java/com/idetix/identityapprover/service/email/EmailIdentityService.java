@@ -22,7 +22,7 @@ public class EmailIdentityService {
         if (repository.findById(eMail).orElse(null)== null){
             EmailIdentity emailIdentity = new EmailIdentity(eMail,generateSecret(),"",false);
             if (emailService.sendSecretViaEmail(emailIdentity.getEmail(), emailIdentity.getSecret())== true){
-                updateEmailIdentity(emailIdentity);
+                repository.save(emailIdentity);
             }
             return true;
         }
