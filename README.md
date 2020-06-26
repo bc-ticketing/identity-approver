@@ -14,7 +14,7 @@ To Send Emails, you need acces to a Mailserver. The credential have to be specif
 
 ### Sendign SMS
 
-To Send SMS, the Services of Twillio(https://www.twilio.com/sms) are used. Therefore you need to create an Account with Twillio. Add your Tokens to the application.yml file.
+To Send SMS, the Services of [Twillio](https://www.twilio.com/sms) are used. Therefore you need to create an Account with Twillio. Add your Tokens to the application.yml file.
 
 ### Database
 
