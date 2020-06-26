@@ -1,22 +1,27 @@
 # identity-approver
 
 This is a Sample Implementation of our Identity Approover
-##Purpose
+## Purpose
+
 It lets you register a Phone Number or an Email Adress as your Identity proof. It then sends a secret to the registerd Identity. 
 This secret must then be signed using the Ether Address the Identtiy should be linked to.
 
 When sending this signed secret to the Identity Approver, it will approve your Identity by including your Ether Adress in the Identity Smart Contract. Only the Ethe Address is stored on chain. All the other Data is kept in the Backend.
 
-###Sending Mails
+### Sending Mails
+
 To Send Emails, you need acces to a Mailserver. The credential have to be specified in the application.yml file
 
-###Sendign SMS
+### Sendign SMS
+
 To Send SMS, the Services of Twillio are used. Therefore you need to create an Account with Twillio. Add your Tokens to the application.yml file.
 
-###Database
+### Database
+
 As Database, you can use any Database, just specify it in the application.yml file
 
-###Ether Wallet
+### Ether Wallet
+
 Last but not least, you need a on the Identity registerd ETH Adress to store the Identity proofs on chain.
 
 For this you need to provide the path and password of your wallet file in the application.yml file
