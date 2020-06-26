@@ -21,16 +21,16 @@ public class EmailServiceImpl implements EmailService {
         MimeMessage message = emailSender.createMimeMessage();
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, false, "utf-8");
-        String htmlMsg = "<body style='border:2px solid black'>"
-                +"Your secret token for registration is  <br>"
-                + secret
-                + "<br>Please use this OTP to complete your new user registration."+
-                "OTP is confidential, do not share this  with anyone.</body>";
-        message.setContent(htmlMsg, "text/html");
-        helper.setTo(to);
-        helper.setSubject("Your Verification Token");
-        emailSender.send(message);
-        result= true;
+            String htmlMsg = "<body style='border:2px solid black'>"
+                    + "Your secret token for registration is  <br>"
+                    + secret
+                    + "<br>Please use this OTP to complete your new user registration." +
+                    "OTP is confidential, do not share this  with anyone.</body>";
+            message.setContent(htmlMsg, "text/html");
+            helper.setTo(to);
+            helper.setSubject("Your Verification Token");
+            emailSender.send(message);
+            result = true;
         } catch (MessagingException e) {
             throw new MailParseException(e);
         }

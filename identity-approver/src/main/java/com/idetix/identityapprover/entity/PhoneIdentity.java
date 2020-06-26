@@ -16,7 +16,7 @@ import javax.persistence.Table;
 @Table(name = "Phone_Identity_TBL")
 public class PhoneIdentity {
     @Id
-    @Column(name = "PHONENR",unique = true,columnDefinition = "VARCHAR(42)")
+    @Column(name = "PHONENR", unique = true, columnDefinition = "VARCHAR(42)")
     private String phoneNr;
     private String secret;
     private String ethAddress;

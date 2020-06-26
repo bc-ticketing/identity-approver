@@ -18,14 +18,12 @@ public class SecurityServiceImpl implements SecurityService {
 
     public final String PERSONAL_MESSAGE_PREFIX = "\u0019Ethereum Signed Message:\n";
 
-    public boolean verifyAddressFromSignature(String address, String signature, String message)
-    {
+    public boolean verifyAddressFromSignature(String address, String signature, String message) {
         byte[] signatureBytes = Numeric.hexStringToByteArray(signature);
         String prefix = PERSONAL_MESSAGE_PREFIX + message.length();
         byte[] msgHash = Hash.sha3((prefix + message).getBytes());
         byte v = signatureBytes[64];
-        if(v < 27)
-        {
+        if (v < 27) {
             v += 27;
         }
         Sign.SignatureData sd = new Sign.SignatureData(
@@ -35,17 +33,14 @@ public class SecurityServiceImpl implements SecurityService {
         String addressRecovered = null;
         boolean match = false;
         // Iterate for each possible key to recover
-        for (int i = 0; i < 4; i++)
-        {
+        for (int i = 0; i < 4; i++) {
             BigInteger publicKey = Sign.recoverFromSignature(
                     (byte) i,
                     new ECDSASignature(new BigInteger(1, sd.getR()), new BigInteger(1, sd.getS())),
                     msgHash);
-            if (publicKey != null)
-            {
+            if (publicKey != null) {
                 addressRecovered = "0x" + Keys.getAddress(publicKey);
-                if (addressRecovered.equals(address))
-                {
+                if (addressRecovered.equals(address)) {
                     match = true;
                     break;
                 }
@@ -53,11 +48,12 @@ public class SecurityServiceImpl implements SecurityService {
         }
         return match;
     }
+
     public String getAlphaNumericString(int n, boolean numOnly) {
         String AlphaNumericString;
-        if (numOnly){
+        if (numOnly) {
             AlphaNumericString = "0123456789";
-        }else {
+        } else {
             AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                     + "0123456789"
                     + "abcdefghijklmnopqrstuvxyz";
@@ -65,7 +61,7 @@ public class SecurityServiceImpl implements SecurityService {
         StringBuilder sb = new StringBuilder(n);
         for (int i = 0; i < n; i++) {
             int index
-                    = (int)(AlphaNumericString.length()
+                    = (int) (AlphaNumericString.length()
                     * Math.random());
             sb.append(AlphaNumericString
                     .charAt(index));

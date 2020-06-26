@@ -3,7 +3,6 @@ package com.idetix.identityapprover.service.blockchain;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.datatypes.Address;
@@ -13,14 +12,12 @@ import org.web3j.crypto.Credentials;
 import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
-import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.tx.RawTransactionManager;
 import org.web3j.tx.TransactionManager;
 import org.web3j.tx.gas.DefaultGasProvider;
 import org.web3j.tx.response.PollingTransactionReceiptProcessor;
 import org.web3j.tx.response.TransactionReceiptProcessor;
-import org.web3j.utils.Collection;
 
 import java.math.BigInteger;
 import java.util.Arrays;
@@ -39,11 +36,12 @@ public class BlockchainServiceImpl implements BlockchainService {
             @Value("${BlockchainPath}") String blockchainPath,
             @Value("${BlockchainWalletPath}") String walletPath,
             @Value("${BlockchainWalletPSWD}") String walletPSWD,
-            @Value("${IdentityContractAddress}") String contractAddress){
+            @Value("${IdentityContractAddress}") String contractAddress) {
         web3 = Web3j.build(new HttpService(blockchainPath));
         credentials = WalletUtils.loadCredentials(walletPSWD, walletPath);
         this.contractAddress = contractAddress;
     }
+
     @Override
     public boolean SaveIdentityProofToChain(String ethAddress, int securityLevel) {
         try {
@@ -67,8 +65,7 @@ public class BlockchainServiceImpl implements BlockchainService {
 
             TransactionReceipt txReceipt = receiptProcessor.waitForTransactionReceipt(txHash);
             System.out.println(txReceipt.getBlockNumber());
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
         return true;
