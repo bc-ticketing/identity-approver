@@ -15,8 +15,8 @@ public class EmailIdentityService {
     private SecurityService securityService;
     @Autowired
     private EmailService emailService;
-//    @Autowired
-//    private BlockchainService blockchainService;
+    @Autowired
+    private BlockchainService blockchainService;
 
     // Method to creat a new Request to verify a new eMail Address
     // If the Address already exists, a new secret is Sent
@@ -54,10 +54,11 @@ public class EmailIdentityService {
         EmailIdentity emailIdentity = getEmailIdentityById(eMail);
         if (emailIdentity.getSecret().contentEquals(secret) &&
                 securityService.verifyAddressFromSignature(ethAddress,signedSecret,secret)){
-            // TODO: 19.06.2020 : Call Smart Contract and Verify Address
-            emailIdentity.setVerified(true);
-            emailIdentity.setEthAddress(ethAddress);
-            updateEmailIdentity(emailIdentity);
+            if (blockchainService.SaveIdentityProofToChain(ethAddress,1) == true){
+                emailIdentity.setVerified(true);
+                emailIdentity.setEthAddress(ethAddress);
+                updateEmailIdentity(emailIdentity);
+            }
         }
 
         return emailIdentity;

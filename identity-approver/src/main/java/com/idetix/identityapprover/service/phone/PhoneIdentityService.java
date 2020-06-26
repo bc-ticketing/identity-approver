@@ -4,6 +4,7 @@ import com.idetix.identityapprover.entity.EmailIdentity;
 import com.idetix.identityapprover.entity.PhoneIdentity;
 import com.idetix.identityapprover.repository.EmailIdentityRepository;
 import com.idetix.identityapprover.repository.PhoneIdentityRepository;
+import com.idetix.identityapprover.service.blockchain.BlockchainService;
 import com.idetix.identityapprover.service.security.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,8 @@ public class PhoneIdentityService {
     private SecurityService securityService;
     @Autowired
     private PhoneService phoneService;
+    @Autowired
+    private BlockchainService blockchainService;
 
     // Method to creat a new Request to verify a new eMail Address
     // If the Address already exists, a new secret is Sent
@@ -53,10 +56,11 @@ public class PhoneIdentityService {
         PhoneIdentity phoneIdentity = getPhoneIdentityById(phoneNr);
         if (phoneIdentity.getSecret().contentEquals(secret) &&
                 securityService.verifyAddressFromSignature(ethAddress,signedSecret,secret)){
-            // TODO: 19.06.2020 : Call Smart Contract and Verify Address
-            phoneIdentity.setVerified(true);
-            phoneIdentity.setEthAddress(ethAddress);
-            updatePhoneIdentity(phoneIdentity);
+            if (blockchainService.SaveIdentityProofToChain(ethAddress,2)==true){
+                phoneIdentity.setVerified(true);
+                phoneIdentity.setEthAddress(ethAddress);
+                updatePhoneIdentity(phoneIdentity);
+            }
         }
 
         return phoneIdentity;
