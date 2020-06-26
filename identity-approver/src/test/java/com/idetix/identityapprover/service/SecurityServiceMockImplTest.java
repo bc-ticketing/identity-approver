@@ -30,20 +30,20 @@ class SecurityServiceMockImplTest {
     }
     @Test
     public void testgetAlphaNumericStringNotSame(){
-        String RandomString = securityService.getAlphaNumericString(SECRET_LENGTH);
-        String RandomString2 = securityService.getAlphaNumericString(SECRET_LENGTH);
+        String RandomString = securityService.getAlphaNumericString(SECRET_LENGTH, false);
+        String RandomString2 = securityService.getAlphaNumericString(SECRET_LENGTH,false);
         boolean verified = RandomString.contentEquals(RandomString2);
         assertTrue(verified);
     }
     @Test
     public void testgetAlphaNumericStringRightLength(){
-        String RandomString = securityService.getAlphaNumericString(SECRET_LENGTH);
+        String RandomString = securityService.getAlphaNumericString(SECRET_LENGTH, false);
         boolean verified = RandomString.length() == SECRET_LENGTH;
         assertTrue(verified);
     }
     @Test
     public void testgetAlphaNumericStringRightChars(){
-        String RandomString = securityService.getAlphaNumericString(SECRET_LENGTH);
+        String RandomString = securityService.getAlphaNumericString(SECRET_LENGTH, false);
         CharacterIterator it = new StringCharacterIterator(RandomString);
         boolean verified = true;
         while (it.current() != CharacterIterator.DONE && verified == true) {

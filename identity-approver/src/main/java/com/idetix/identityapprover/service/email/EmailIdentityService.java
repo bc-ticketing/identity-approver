@@ -2,6 +2,7 @@ package com.idetix.identityapprover.service.email;
 
 import com.idetix.identityapprover.entity.EmailIdentity;
 import com.idetix.identityapprover.repository.EmailIdentityRepository;
+import com.idetix.identityapprover.service.blockchain.BlockchainService;
 import com.idetix.identityapprover.service.security.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,8 @@ public class EmailIdentityService {
     private SecurityService securityService;
     @Autowired
     private EmailService emailService;
+//    @Autowired
+//    private BlockchainService blockchainService;
 
     // Method to creat a new Request to verify a new eMail Address
     // If the Address already exists, a new secret is Sent
@@ -68,7 +71,7 @@ public class EmailIdentityService {
         return repository.save(existingEmailIdentity);
     }
     private String generateSecret(){
-        return securityService.getAlphaNumericString(42);
+        return securityService.getAlphaNumericString(42, false);
     }
 
 }

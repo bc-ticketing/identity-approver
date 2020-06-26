@@ -69,7 +69,7 @@ public class PhoneIdentityService {
         return repository.save(existingPhoneIdentity);
     }
     private String generateSecret(){
-        return securityService.getAlphaNumericString(10);
+        return securityService.getAlphaNumericString(4, true);
     }
 
 }

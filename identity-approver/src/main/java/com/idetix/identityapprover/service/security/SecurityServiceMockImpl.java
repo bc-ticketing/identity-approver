@@ -53,9 +53,13 @@ public class SecurityServiceMockImpl implements SecurityService {
         }
         return match;
     }
-    public String getAlphaNumericString(int n)
-    {
-        String AlphaNumericString = "A";
+    public String getAlphaNumericString(int n , boolean numOnly) {
+        String AlphaNumericString;
+        if (numOnly){
+            AlphaNumericString = "1";
+        }else {
+            AlphaNumericString = "A";
+        }
         StringBuilder sb = new StringBuilder(n);
         for (int i = 0; i < n; i++) {
             int index
