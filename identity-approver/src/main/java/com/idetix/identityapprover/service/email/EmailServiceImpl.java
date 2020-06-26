@@ -1,6 +1,7 @@
 package com.idetix.identityapprover.service.email;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.mail.MailParseException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
+@Profile("default")
 @Service
 public class EmailServiceImpl implements EmailService {
     @Autowired
@@ -27,9 +29,8 @@ public class EmailServiceImpl implements EmailService {
         message.setContent(htmlMsg, "text/html");
         helper.setTo(to);
         helper.setSubject("Your Verification Token");
-        result= true;
         emailSender.send(message);
-
+        result= true;
         } catch (MessagingException e) {
             throw new MailParseException(e);
         }

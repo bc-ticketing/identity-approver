@@ -26,6 +26,8 @@ public class EmailIdentityService {
             EmailIdentity emailIdentity = new EmailIdentity(eMail,generateSecret(),"",false);
             if (emailService.sendSecretViaEmail(emailIdentity.getEmail(), emailIdentity.getSecret())== true){
                 repository.save(emailIdentity);
+            }else {
+                return false;
             }
             return true;
         }
@@ -36,6 +38,8 @@ public class EmailIdentityService {
         emailIdentity.setSecret(generateSecret());
         if (emailService.sendSecretViaEmail(emailIdentity.getEmail(), emailIdentity.getSecret())== true){
             updateEmailIdentity(emailIdentity);
+        }else {
+            return false;
         }
         return true;
     }

@@ -25,6 +25,8 @@ public class PhoneIdentityService {
             PhoneIdentity phoneIdentity = new PhoneIdentity(phoneNr,generateSecret(),"",false);
             if (phoneService.sendSecretViaSMS(phoneIdentity.getPhoneNr(), phoneIdentity.getSecret())== true){
                 repository.save(phoneIdentity);
+            }else {
+                return false;
             }
             return true;
         }
@@ -34,6 +36,9 @@ public class PhoneIdentityService {
         }phoneIdentity.setSecret(generateSecret());
         if (phoneService.sendSecretViaSMS(phoneIdentity.getPhoneNr(), phoneIdentity.getSecret())== true){
             updatePhoneIdentity(phoneIdentity);
+        }
+        else {
+            return false;
         }
         return true;
     }
