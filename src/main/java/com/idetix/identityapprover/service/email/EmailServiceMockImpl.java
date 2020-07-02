@@ -12,5 +12,4 @@ public class EmailServiceMockImpl implements EmailService {
         return true;
     }
 
-
 }

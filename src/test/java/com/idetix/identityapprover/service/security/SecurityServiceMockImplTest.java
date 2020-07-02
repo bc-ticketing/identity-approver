@@ -1,7 +1,5 @@
-package com.idetix.identityapprover.service;
+package com.idetix.identityapprover.service.security;
 
-import com.idetix.identityapprover.service.security.SecurityService;
-import com.idetix.identityapprover.service.security.SecurityServiceMockImpl;
 import org.junit.jupiter.api.Test;
 
 import java.text.CharacterIterator;

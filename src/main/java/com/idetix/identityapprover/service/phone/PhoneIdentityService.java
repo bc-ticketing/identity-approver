@@ -60,7 +60,6 @@ public class PhoneIdentityService {
                 updatePhoneIdentity(phoneIdentity);
             }
         }
-
         return phoneIdentity;
     }
 

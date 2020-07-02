@@ -15,7 +15,6 @@ import java.util.Arrays;
 @Service
 public class SecurityServiceMockImpl implements SecurityService {
 
-
     public final String PERSONAL_MESSAGE_PREFIX = "\u0019Ethereum Signed Message:\n";
 
     public boolean verifyAddressFromSignature(String address, String signature, String message) {
