@@ -6,6 +6,7 @@ import org.springframework.mail.MailParseException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.apache.commons.validator.routines.EmailValidator;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -18,6 +19,11 @@ public class EmailServiceImpl implements EmailService {
 
     public boolean sendSecretViaEmail(String to, String secret) {
         boolean result = false;
+        boolean allowLocal = true;
+        boolean valid = EmailValidator.getInstance(allowLocal).isValid(to);
+        if (!valid){
+            return result;
+        }
         MimeMessage message = emailSender.createMimeMessage();
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, false, "utf-8");

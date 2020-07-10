@@ -48,16 +48,18 @@ public class EmailIdentityService {
     // When the provided secret corrospond with the secret on the DB and the provided Signature is correct for the secret
     // and ETHAddress, the Identity gets verified on the Blockchain and is set to verified on the DB
     public EmailIdentity verifyEmailIdentity(String eMail, String ethAddress, String secret, String signedSecret) {
-        if (repository.findById(eMail).orElse(null) == null) {
+        if (getEmailIdentityById(eMail) == null) {
             return null;
         }
         EmailIdentity emailIdentity = getEmailIdentityById(eMail);
         if (emailIdentity.getSecret().contentEquals(secret) &&
                 securityService.verifyAddressFromSignature(ethAddress, signedSecret, secret)) {
-            if (blockchainService.SaveIdentityProofToChain(ethAddress, 1) == true) {
-                emailIdentity.setVerified(true);
-                emailIdentity.setEthAddress(ethAddress);
-                updateEmailIdentity(emailIdentity);
+            if (blockchainService.getSecurityLevelforAdress(ethAddress) < 1) {
+                if (blockchainService.saveIdentityProofToChain(ethAddress, 1) == true) {
+                    emailIdentity.setVerified(true);
+                    emailIdentity.setEthAddress(ethAddress);
+                    updateEmailIdentity(emailIdentity);
+                }
             }
         }
 

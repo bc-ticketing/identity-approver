@@ -48,16 +48,18 @@ public class PhoneIdentityService {
     // When the provided secret corrospond with the secret on the DB and the provided Signature is correct for the secret
     // and ETHAddress, the Identity gets verified on the Blockchain and is set to verified on the DB
     public PhoneIdentity verifyPhoneIdentity(String phoneNr, String ethAddress, String secret, String signedSecret) {
-        if (repository.findById(phoneNr).orElse(null) == null) {
+        if (getPhoneIdentityById(phoneNr) == null) {
             return null;
         }
         PhoneIdentity phoneIdentity = getPhoneIdentityById(phoneNr);
         if (phoneIdentity.getSecret().contentEquals(secret) &&
                 securityService.verifyAddressFromSignature(ethAddress, signedSecret, secret)) {
-            if (blockchainService.SaveIdentityProofToChain(ethAddress, 2) == true) {
-                phoneIdentity.setVerified(true);
-                phoneIdentity.setEthAddress(ethAddress);
-                updatePhoneIdentity(phoneIdentity);
+            if (blockchainService.getSecurityLevelforAdress(ethAddress) < 2) {
+                if (blockchainService.saveIdentityProofToChain(ethAddress, 2) == true) {
+                    phoneIdentity.setVerified(true);
+                    phoneIdentity.setEthAddress(ethAddress);
+                    updatePhoneIdentity(phoneIdentity);
+                }
             }
         }
         return phoneIdentity;
