@@ -11,7 +11,7 @@ import org.web3j.utils.Numeric;
 import java.math.BigInteger;
 import java.util.Arrays;
 
-@Profile("!default")
+@Profile("dev")
 @Service
 public class SecurityServiceMockImpl implements SecurityService {
 

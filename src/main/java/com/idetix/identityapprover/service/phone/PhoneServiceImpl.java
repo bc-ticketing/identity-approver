@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import static com.twilio.Twilio.init;
 
-@Profile("default")
+@Profile("!dev")
 @Service
 public class PhoneServiceImpl implements PhoneService {
 

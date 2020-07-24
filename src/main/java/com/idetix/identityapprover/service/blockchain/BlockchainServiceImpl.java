@@ -13,6 +13,7 @@ import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Uint;
 import org.web3j.abi.datatypes.generated.Uint256;
+import org.web3j.abi.datatypes.generated.Uint8;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
@@ -43,11 +44,10 @@ public class BlockchainServiceImpl implements BlockchainService {
     @Autowired
     public BlockchainServiceImpl(
             @Value("${BlockchainPath}") String blockchainPath,
-            @Value("${BlockchainWalletPath}") String walletPath,
-            @Value("${BlockchainWalletPSWD}") String walletPSWD,
+            @Value("${BlockchainPrivatKey}") String privateKey,
             @Value("${IdentityContractAddress}") String contractAddress) {
         web3 = Web3j.build(new HttpService(blockchainPath));
-        credentials = WalletUtils.loadCredentials(walletPSWD, walletPath);
+        credentials = Credentials.create(privateKey);;
         this.contractAddress = contractAddress;
     }
 
@@ -55,7 +55,7 @@ public class BlockchainServiceImpl implements BlockchainService {
     public boolean saveIdentityProofToChain(String ethAddress, int securityLevel) {
         try {
             Function function = new Function("approveIdentity", // Function name
-                    Arrays.asList(new Address(ethAddress), new Uint(BigInteger.valueOf(securityLevel))), // Function input parameters
+                    Arrays.asList(new Address(ethAddress), new Uint8(BigInteger.valueOf(securityLevel))), // Function input parameters
                     Collections.emptyList()); // Function returned parameters
             String txData = FunctionEncoder.encode(function);
             TransactionManager txManager = new RawTransactionManager(web3, credentials);
@@ -93,8 +93,8 @@ public class BlockchainServiceImpl implements BlockchainService {
 
             List<Type> someTypes = FunctionReturnDecoder.decode(
                     response.getValue(), function.getOutputParameters());
-            Uint256 uint256 = (Uint256) someTypes.get(0);
-            return uint256.getValue().intValue();
+            Uint8 uint8= (Uint8) someTypes.get(0);
+            return uint8.getValue().intValue();
 
         } catch (Exception e) {
             return -1;

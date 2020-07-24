@@ -11,7 +11,7 @@ import org.apache.commons.validator.routines.EmailValidator;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
-@Profile("default")
+@Profile("!dev")
 @Service
 public class EmailServiceImpl implements EmailService {
     @Autowired

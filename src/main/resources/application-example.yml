@@ -29,7 +29,6 @@ twilioAuthToken: *Twilio Auth Token*
 twiliophoneNumber: *Twilio Phone Number*
 IdentityContractAddress: *'Address of Identity Contract'*
 BlockchainPath: *HTTP Addres used to connect to Eth Net*
-BlockchainWalletPath: *Path to Wallet File*
-BlockchainWalletPSWD: *Wallet Password*
+BlockchainPrivatKey: *Privatkey of ETH Address used to verify*
 server:
   port: *Port you want to Serv*

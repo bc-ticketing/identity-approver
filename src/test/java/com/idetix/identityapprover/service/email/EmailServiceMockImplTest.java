@@ -1,8 +1,10 @@
 package com.idetix.identityapprover.service.email;
 
+
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class EmailServiceMockImplTest {
     private EmailService emailServicemock = new EmailServiceMockImpl();
@@ -12,11 +14,12 @@ class EmailServiceMockImplTest {
 
 
     @Test
-    void sendSecretViaEmailValid() {
+    public void sendSecretViaEmailValid() {
         boolean valid =   emailServicemock.sendSecretViaEmail(EMAIL_VALID,SECRET);
         assertTrue(valid);
     }
-    void sendSecretViaEmailInvalid() {
+    @Test
+    public void sendSecretViaEmailInvalid() {
         boolean invalid = emailServicemock.sendSecretViaEmail(EMAIL_INVALID, SECRET);
         assertFalse(invalid);
     }

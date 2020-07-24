@@ -4,7 +4,7 @@ import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-@Profile("!default")
+@Profile("dev")
 @Service
 public class EmailServiceMockImpl implements EmailService {
 
