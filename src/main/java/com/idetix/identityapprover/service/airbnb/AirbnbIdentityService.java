@@ -1,13 +1,11 @@
 package com.idetix.identityapprover.service.airbnb;
 
 import com.idetix.identityapprover.entity.AirbnbIdentity;
-import org.web3j.abi.datatypes.generated.Uint256;
 import com.idetix.identityapprover.repository.AirbnbIdentityRepository;
 import com.idetix.identityapprover.service.blockchain.BlockchainService;
 import com.idetix.identityapprover.service.security.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.web3j.abi.datatypes.generated.Uint256;
 
 @Service
 public class AirbnbIdentityService {
@@ -18,50 +16,51 @@ public class AirbnbIdentityService {
     @Autowired
     private BlockchainService blockchainService;
 
-    // Method to creat a new Request to verify a new profileUrl Address
-    // If the Address already exists, a new secret is Sent
-    // If the Address is allready verified return false
+    // Method to create a new Request to verify a new profileUrl address.
+    // If the address already exists, a new secret is sent.
+    // If the address is already verified return false.
     public String addAirbnbIdentity(String profileUrl) {
-        if (getAirbnbIdentityById(profileUrl) == null) {
+        if (repository.findById(profileUrl).orElse(null) == null) {
             AirbnbIdentity airbnbIdentity = new AirbnbIdentity(profileUrl, generateSecret(), "", false);
             saveAirbnbIdentityById(airbnbIdentity);
             return airbnbIdentity.getSecret();
             }
         AirbnbIdentity airbnbIdentity = getAirbnbIdentityById(profileUrl);
-        if (airbnbIdentity.getVerified() == true) {
-            return "allready verified";
+        if (airbnbIdentity.getVerified()) {
+            return "already verified";
         }
         airbnbIdentity.setSecret(generateSecret());
         updateAirbnbIdentity(airbnbIdentity);
         return airbnbIdentity.getSecret();
     }
 
-    //Method to finaly verify the Airbnb Profile Address and make it unchangable in the Database
-    // When the provided secret corrospond with the secret on the DB and the provided Signature is correct for the secret
-    // and ETHAddress, the Identity gets verified on the Blockchain and is set to verified on the DB
+    // Method to verify the Airbnb Profile address and make it final in the Database
+    // When the provided secret corresponds with the secret on the DB and the provided Signature is correct for the secret
+    // and the ETH address, the Identity gets verified on the Blockchain and its status is set to `verified` on the database.
     public AirbnbIdentity verifyAirbnbIdentity(String profileUrl, String ethAddress) {
-        if (getAirbnbIdentityById(profileUrl) == null) {
-            return null;
-        }
         AirbnbIdentity airbnbIdentity = getAirbnbIdentityById(profileUrl);
         // TODO: 10.07.2020 get Signed String from Profile and check if verified
         String signedSecret = "yes";
 
         if (securityService.verifyAddressFromSignature(ethAddress, signedSecret, airbnbIdentity.getSecret())) {
-            if (blockchainService.getSecurityLevelforAdress(ethAddress) < 3) {
-                if (blockchainService.saveIdentityProofToChain(ethAddress, 3) == true) {
+            if (blockchainService.getSecurityLevelForAddress(ethAddress) < 3) {
+                if (blockchainService.saveIdentityProofToChain(ethAddress, 3)) {
                     airbnbIdentity.setVerified(true);
                     airbnbIdentity.setEthAddress(ethAddress);
                     updateAirbnbIdentity(airbnbIdentity);
                 }
             }
         }
-
         return airbnbIdentity;
     }
 
     private AirbnbIdentity getAirbnbIdentityById(String profileUrl) {
-        return repository.findById(profileUrl).orElse(null);
+        AirbnbIdentity airbnbIdentity = repository.findById(profileUrl).orElse(null);
+        if (airbnbIdentity == null) {
+            throw new IllegalArgumentException("The repository does not contain an EMail identity for the EMail" +
+                    " `" + profileUrl + "`.");
+        }
+        return airbnbIdentity;
     }
 
     private AirbnbIdentity saveAirbnbIdentityById(AirbnbIdentity airbnbIdentity) {
@@ -70,6 +69,10 @@ public class AirbnbIdentityService {
 
     private AirbnbIdentity updateAirbnbIdentity(AirbnbIdentity airbnbIdentity) {
         AirbnbIdentity existingAirbnbIdentity = repository.findById(airbnbIdentity.getProfileUrl()).orElse(null);
+        if (existingAirbnbIdentity == null) {
+            throw new IllegalArgumentException("The repository does not contain an EMail identity for the EmailIdentity" +
+                    " `" + airbnbIdentity + "`.");
+        }
         existingAirbnbIdentity.setEthAddress(airbnbIdentity.getEthAddress());
         existingAirbnbIdentity.setSecret(airbnbIdentity.getSecret());
         existingAirbnbIdentity.setVerified(airbnbIdentity.getVerified());
@@ -79,6 +82,4 @@ public class AirbnbIdentityService {
     private String generateSecret() {
         return securityService.getAlphaNumericString(42, false);
     }
-
 }
-

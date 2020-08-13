@@ -24,7 +24,7 @@ public class EmailIdentityService {
     public boolean addEmailIdentity(String eMail) {
         if (repository.findById(eMail).orElse(null) == null) {
             EmailIdentity emailIdentity = new EmailIdentity(eMail, generateSecret(), "", false);
-            if (emailService.sendSecretViaEmail(emailIdentity.getEmail(), emailIdentity.getSecret()) == true) {
+            if (emailService.sendSecretViaEmail(emailIdentity.getEmail(), emailIdentity.getSecret())) {
                 repository.save(emailIdentity);
             } else {
                 return false;
@@ -32,11 +32,11 @@ public class EmailIdentityService {
             return true;
         }
         EmailIdentity emailIdentity = getEmailIdentityById(eMail);
-        if (emailIdentity.getVerified() == true) {
+        if (emailIdentity.getVerified()) {
             return false;
         }
         emailIdentity.setSecret(generateSecret());
-        if (emailService.sendSecretViaEmail(emailIdentity.getEmail(), emailIdentity.getSecret()) == true) {
+        if (emailService.sendSecretViaEmail(emailIdentity.getEmail(), emailIdentity.getSecret())) {
             updateEmailIdentity(emailIdentity);
         } else {
             return false;
@@ -44,18 +44,15 @@ public class EmailIdentityService {
         return true;
     }
 
-    //Method to finaly verify the eMail Address and make it unchangable in the Database
-    // When the provided secret corrospond with the secret on the DB and the provided Signature is correct for the secret
-    // and ETHAddress, the Identity gets verified on the Blockchain and is set to verified on the DB
+    // Method to verify the EMail address and make it final in the database.
+    // When the provided secret corresponds with the secret on the database, the provided signature is correct
+    // for the secret and ETH address, the identity gets verified on the Blockchain and is set to verified on the database.
     public EmailIdentity verifyEmailIdentity(String eMail, String ethAddress, String secret, String signedSecret) {
-        if (getEmailIdentityById(eMail) == null) {
-            return null;
-        }
         EmailIdentity emailIdentity = getEmailIdentityById(eMail);
         if (emailIdentity.getSecret().contentEquals(secret) &&
                 securityService.verifyAddressFromSignature(ethAddress, signedSecret, secret)) {
-            if (blockchainService.getSecurityLevelforAdress(ethAddress) < 1) {
-                if (blockchainService.saveIdentityProofToChain(ethAddress, 1) == true) {
+            if (blockchainService.getSecurityLevelForAddress(ethAddress) < 1) {
+                if (blockchainService.saveIdentityProofToChain(ethAddress, 1)) {
                     emailIdentity.setVerified(true);
                     emailIdentity.setEthAddress(ethAddress);
                     updateEmailIdentity(emailIdentity);
@@ -67,11 +64,20 @@ public class EmailIdentityService {
     }
 
     private EmailIdentity getEmailIdentityById(String email) {
-        return repository.findById(email).orElse(null);
+        EmailIdentity emailIdentity = repository.findById(email).orElse(null);
+        if (emailIdentity == null) {
+            throw new IllegalArgumentException("The repository does not contain an EMail identity for the EMail" +
+                    " `" + email + "`.");
+        }
+        return emailIdentity;
     }
 
     private EmailIdentity updateEmailIdentity(EmailIdentity emailIdentity) {
         EmailIdentity existingEmailIdentity = repository.findById(emailIdentity.getEmail()).orElse(null);
+        if (existingEmailIdentity == null) {
+            throw new IllegalArgumentException("The repository does not contain an EMail identity for the EmailIdentity" +
+                    " `" + emailIdentity + "`.");
+        }
         existingEmailIdentity.setEthAddress(emailIdentity.getEthAddress());
         existingEmailIdentity.setSecret(emailIdentity.getSecret());
         existingEmailIdentity.setVerified(emailIdentity.getVerified());

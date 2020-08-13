@@ -1,6 +1,5 @@
 package com.idetix.identityapprover.service.blockchain;
 
-import jnr.ffi.annotations.In;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,11 +10,9 @@ import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
-import org.web3j.abi.datatypes.Uint;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.abi.datatypes.generated.Uint8;
 import org.web3j.crypto.Credentials;
-import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.request.Transaction;
@@ -32,7 +29,6 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
 
 @Service
 public class BlockchainServiceImpl implements BlockchainService {
@@ -79,12 +75,13 @@ public class BlockchainServiceImpl implements BlockchainService {
         }
         return true;
     }
+
     @Override
-    public int getSecurityLevelforAdress (String ethAddress) {
+    public int getSecurityLevelForAddress (String ethAddress) {
         try {
             Function function = new Function("getSecurityLevel", // Function name
-                    Arrays.asList(new Address(credentials.getAddress()), new Address(ethAddress)), // Function input parameters
-                    Collections.singletonList(new TypeReference<Uint256>() {})); // Function returned parameters
+                    Arrays.asList(new Address(credentials.getAddress()), new Address(ethAddress)), // input parameters
+                    Collections.singletonList(new TypeReference<Uint256>() {})); // return parameters
 
             String encodedFunction = FunctionEncoder.encode(function);
             EthCall response = web3.ethCall(
@@ -100,6 +97,5 @@ public class BlockchainServiceImpl implements BlockchainService {
             return -1;
         }
     }
-
 
 }

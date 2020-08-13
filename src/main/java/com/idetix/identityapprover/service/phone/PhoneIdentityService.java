@@ -18,13 +18,13 @@ public class PhoneIdentityService {
     @Autowired
     private BlockchainService blockchainService;
 
-    // Method to creat a new Request to verify a new eMail Address
-    // If the Address already exists, a new secret is Sent
-    // If the Address is allready verified return false
+    // Method to create a new Request to verify a new EMail address.
+    // If the address already exists, a new secret is sent.
+    // If the address is already verified return false.
     public boolean addPhoneIdentity(String phoneNr) {
         if (repository.findById(phoneNr).orElse(null) == null) {
             PhoneIdentity phoneIdentity = new PhoneIdentity(phoneNr, generateSecret(), "", false);
-            if (phoneService.sendSecretViaSMS(phoneIdentity.getPhoneNr(), phoneIdentity.getSecret()) == true) {
+            if (phoneService.sendSecretViaSMS(phoneIdentity.getPhoneNr(), phoneIdentity.getSecret())) {
                 repository.save(phoneIdentity);
             } else {
                 return false;
@@ -32,11 +32,11 @@ public class PhoneIdentityService {
             return true;
         }
         PhoneIdentity phoneIdentity = getPhoneIdentityById(phoneNr);
-        if (phoneIdentity.getVerified() == true) {
+        if (phoneIdentity.getVerified()) {
             return false;
         }
         phoneIdentity.setSecret(generateSecret());
-        if (phoneService.sendSecretViaSMS(phoneIdentity.getPhoneNr(), phoneIdentity.getSecret()) == true) {
+        if (phoneService.sendSecretViaSMS(phoneIdentity.getPhoneNr(), phoneIdentity.getSecret())) {
             updatePhoneIdentity(phoneIdentity);
         } else {
             return false;
@@ -44,18 +44,15 @@ public class PhoneIdentityService {
         return true;
     }
 
-    //Method to finaly verify the eMail Address and make it unchangable in the Database
-    // When the provided secret corrospond with the secret on the DB and the provided Signature is correct for the secret
-    // and ETHAddress, the Identity gets verified on the Blockchain and is set to verified on the DB
+    // Method to verify the EMail address and make it final in the database.
+    // When the provided secret corresponds with the secret on the database, the provided signature is correct
+    // for the secret and ETH address, the identity gets verified on the Blockchain and is set to verified on the database.
     public PhoneIdentity verifyPhoneIdentity(String phoneNr, String ethAddress, String secret, String signedSecret) {
-        if (getPhoneIdentityById(phoneNr) == null) {
-            return null;
-        }
         PhoneIdentity phoneIdentity = getPhoneIdentityById(phoneNr);
         if (phoneIdentity.getSecret().contentEquals(secret) &&
                 securityService.verifyAddressFromSignature(ethAddress, signedSecret, secret)) {
-            if (blockchainService.getSecurityLevelforAdress(ethAddress) < 2) {
-                if (blockchainService.saveIdentityProofToChain(ethAddress, 2) == true) {
+            if (blockchainService.getSecurityLevelForAddress(ethAddress) < 2) {
+                if (blockchainService.saveIdentityProofToChain(ethAddress, 2)) {
                     phoneIdentity.setVerified(true);
                     phoneIdentity.setEthAddress(ethAddress);
                     updatePhoneIdentity(phoneIdentity);
@@ -66,11 +63,20 @@ public class PhoneIdentityService {
     }
 
     private PhoneIdentity getPhoneIdentityById(String phoneNr) {
-        return repository.findById(phoneNr).orElse(null);
+        PhoneIdentity phoneIdentity = repository.findById(phoneNr).orElse(null);
+        if (phoneIdentity == null) {
+            throw new IllegalArgumentException("The repository does not contain an EMail identity for the EMail" +
+                    " `" + phoneNr + "`.");
+        }
+        return phoneIdentity;
     }
 
     private PhoneIdentity updatePhoneIdentity(PhoneIdentity phoneIdentity) {
         PhoneIdentity existingPhoneIdentity = repository.findById(phoneIdentity.getPhoneNr()).orElse(null);
+        if (existingPhoneIdentity == null) {
+            throw new IllegalArgumentException("The repository does not contain an EMail identity for the EmailIdentity" +
+                    " `" + phoneIdentity + "`.");
+        }
         existingPhoneIdentity.setEthAddress(phoneIdentity.getEthAddress());
         existingPhoneIdentity.setSecret(phoneIdentity.getSecret());
         existingPhoneIdentity.setVerified(phoneIdentity.getVerified());
