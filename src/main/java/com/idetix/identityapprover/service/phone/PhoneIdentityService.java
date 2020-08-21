@@ -71,7 +71,7 @@ public class PhoneIdentityService {
         return phoneIdentity;
     }
 
-    private PhoneIdentity updatePhoneIdentity(PhoneIdentity phoneIdentity) {
+    private void updatePhoneIdentity(PhoneIdentity phoneIdentity) {
         PhoneIdentity existingPhoneIdentity = repository.findById(phoneIdentity.getPhoneNr()).orElse(null);
         if (existingPhoneIdentity == null) {
             throw new IllegalArgumentException("The repository does not contain an EMail identity for the EmailIdentity" +
@@ -80,7 +80,7 @@ public class PhoneIdentityService {
         existingPhoneIdentity.setEthAddress(phoneIdentity.getEthAddress());
         existingPhoneIdentity.setSecret(phoneIdentity.getSecret());
         existingPhoneIdentity.setVerified(phoneIdentity.getVerified());
-        return repository.save(existingPhoneIdentity);
+        repository.save(existingPhoneIdentity);
     }
 
     private String generateSecret() {

@@ -1,7 +1,6 @@
 package com.idetix.identityapprover.controller;
 
 import com.idetix.identityapprover.service.OCRService.OCRService;
-import com.idetix.identityapprover.service.email.EmailIdentityService;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;

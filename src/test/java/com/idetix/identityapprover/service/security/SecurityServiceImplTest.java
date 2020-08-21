@@ -18,7 +18,7 @@ public class SecurityServiceImplTest {
     private static final int SECRET_LENGTH = 42;
     private static final String MRZ_Valid = "IDCHEc9170872<4<<<<<<<<<<<<<<<\n9506099M2711184CHE<<<<<<<<<<<2\nSPIELMANN<<NICOLAS<PATRIK<<<<<";
     private static final String MRZ_Invalid = "IDCHEc9170872<3<<<<<<<<<<<<<<<\n9506099M2711184CHE<<<<<<<<<<<4\nSPIELMANN<<NICOLAS<PATRIK<<<<<";
-    private SecurityService securityService = new SecurityServiceImpl();
+    private final SecurityService securityService = new SecurityServiceImpl();
 
     @Test
     public void testVerifyAddressFromSignature() {

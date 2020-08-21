@@ -72,7 +72,7 @@ public class EmailIdentityService {
         return emailIdentity;
     }
 
-    private EmailIdentity updateEmailIdentity(EmailIdentity emailIdentity) {
+    private void updateEmailIdentity(EmailIdentity emailIdentity) {
         EmailIdentity existingEmailIdentity = repository.findById(emailIdentity.getEmail()).orElse(null);
         if (existingEmailIdentity == null) {
             throw new IllegalArgumentException("The repository does not contain an EMail identity for the EmailIdentity" +
@@ -81,7 +81,7 @@ public class EmailIdentityService {
         existingEmailIdentity.setEthAddress(emailIdentity.getEthAddress());
         existingEmailIdentity.setSecret(emailIdentity.getSecret());
         existingEmailIdentity.setVerified(emailIdentity.getVerified());
-        return repository.save(existingEmailIdentity);
+        repository.save(existingEmailIdentity);
     }
 
     private String generateSecret() {

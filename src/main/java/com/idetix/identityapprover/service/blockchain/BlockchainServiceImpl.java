@@ -32,9 +32,9 @@ import java.util.List;
 
 @Service
 public class BlockchainServiceImpl implements BlockchainService {
-    Web3j web3;
-    Credentials credentials;
-    String contractAddress;
+    final Web3j web3;
+    final Credentials credentials;
+    final String contractAddress;
 
     @SneakyThrows
     @Autowired
@@ -43,7 +43,7 @@ public class BlockchainServiceImpl implements BlockchainService {
             @Value("${BlockchainPrivatKey}") String privateKey,
             @Value("${IdentityContractAddress}") String contractAddress) {
         web3 = Web3j.build(new HttpService(blockchainPath));
-        credentials = Credentials.create(privateKey);;
+        credentials = Credentials.create(privateKey);
         this.contractAddress = contractAddress;
     }
 

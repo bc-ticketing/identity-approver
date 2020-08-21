@@ -15,7 +15,7 @@ class SecurityServiceMockImplTest {
     private static final String SIGNATURE = "0x249b6cc439f58597b01d1424d3325922fa765bdefde84412018c9e92dfc5e8f566b138af77305d8e46df7e2d352635b910204fb10174eeae815b2255a842e26e1b";
     private static final String CHARS = "A";
     private static final int SECRET_LENGTH = 42;
-    private SecurityService securityService = new SecurityServiceMockImpl();
+    private final SecurityService securityService = new SecurityServiceMockImpl();
 
     @Test
     public void testVerifyAddressFromSignature() {
@@ -49,7 +49,7 @@ class SecurityServiceMockImplTest {
         String RandomString = securityService.getAlphaNumericString(SECRET_LENGTH, false);
         CharacterIterator it = new StringCharacterIterator(RandomString);
         boolean verified = true;
-        while (it.current() != CharacterIterator.DONE && verified == true) {
+        while (it.current() != CharacterIterator.DONE && verified) {
             verified = CHARS.contains("" + it.current());
             it.next();
         }

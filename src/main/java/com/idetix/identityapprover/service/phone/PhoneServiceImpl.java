@@ -13,7 +13,7 @@ import static com.twilio.Twilio.init;
 @Service
 public class PhoneServiceImpl implements PhoneService {
 
-    private String myTwilioPhoneNumber;
+    private final String myTwilioPhoneNumber;
 
     @Autowired
     public PhoneServiceImpl(

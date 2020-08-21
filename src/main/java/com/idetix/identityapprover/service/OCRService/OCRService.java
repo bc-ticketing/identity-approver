@@ -1,7 +1,6 @@
 package com.idetix.identityapprover.service.OCRService;
 
 import com.idetix.identityapprover.entity.MRZ;
-import com.idetix.identityapprover.entity.MRZType;
 import com.idetix.identityapprover.service.security.SecurityService;
 import lombok.SneakyThrows;
 import net.sourceforge.tess4j.Tesseract1;
@@ -13,7 +12,7 @@ import java.io.File;
 
 @Service
 public class OCRService {
-    Tesseract1 tesseract;
+    final Tesseract1 tesseract;
 
     @Autowired
     private SecurityService securityService;

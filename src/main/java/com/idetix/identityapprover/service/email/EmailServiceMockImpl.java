@@ -10,7 +10,7 @@ public class EmailServiceMockImpl implements EmailService {
 
     public boolean sendSecretViaEmail(String to, String secret) {
         boolean allowLocal = true;
-        boolean valid = EmailValidator.getInstance(allowLocal).isValid(to);
+        boolean valid = EmailValidator.getInstance(true).isValid(to);
         if (!valid){
             return false;
         }

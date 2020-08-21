@@ -10,8 +10,6 @@ import org.web3j.utils.Numeric;
 
 import java.math.BigInteger;
 import java.util.Arrays;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Profile("!dev")
 @Service

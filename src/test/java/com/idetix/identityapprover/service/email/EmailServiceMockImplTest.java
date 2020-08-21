@@ -7,10 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class EmailServiceMockImplTest {
-    private EmailService emailServicemock = new EmailServiceMockImpl();
-    private static String EMAIL_VALID = "nicolas.spielmann@uzh.ch";
-    private static String EMAIL_INVALID = "nicolas.spielmann.uzh.ch";
-    private static String SECRET = "dsfsdfsdf";
+    private final EmailService emailServicemock = new EmailServiceMockImpl();
+    private static final String EMAIL_VALID = "nicolas.spielmann@uzh.ch";
+    private static final String EMAIL_INVALID = "nicolas.spielmann.uzh.ch";
+    private static final String SECRET = "dsfsdfsdf";
 
 
     @Test

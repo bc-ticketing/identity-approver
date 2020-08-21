@@ -21,9 +21,9 @@ public class EmailServiceImpl implements EmailService {
     public boolean sendSecretViaEmail(String to, String secret) {
         boolean result = false;
         boolean allowLocal = true;
-        boolean valid = EmailValidator.getInstance(allowLocal).isValid(to);
+        boolean valid = EmailValidator.getInstance(true).isValid(to);
         if (!valid){
-            return result;
+            return false;
         }
         MimeMessage message = emailSender.createMimeMessage();
         try {
@@ -37,11 +37,10 @@ public class EmailServiceImpl implements EmailService {
             helper.setTo(to);
             helper.setSubject("Your Verification Token");
             emailSender.send(message);
-            result = true;
         } catch (MessagingException e) {
             throw new MailParseException(e);
         }
-        return result;
+        return true;
     }
 
 }
