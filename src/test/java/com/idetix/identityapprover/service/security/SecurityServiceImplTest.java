@@ -16,6 +16,8 @@ public class SecurityServiceImplTest {
     private static final String SIGNATURE = "0x249b6cc439f58597b01d1424d3325922fa765bdefde84412018c9e92dfc5e8f566b138af77305d8e46df7e2d352635b910204fb10174eeae815b2255a842e26e1b";
     private static final String CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvxyz";
     private static final int SECRET_LENGTH = 42;
+    private static final String MRZ_Valid = "IDCHEc9170872<4<<<<<<<<<<<<<<<\n9506099M2711184CHE<<<<<<<<<<<2\nSPIELMANN<<NICOLAS<PATRIK<<<<<";
+    private static final String MRZ_Invalid = "IDCHEc9170872<3<<<<<<<<<<<<<<<\n9506099M2711184CHE<<<<<<<<<<<4\nSPIELMANN<<NICOLAS<PATRIK<<<<<";
     private SecurityService securityService = new SecurityServiceImpl();
 
     @Test
@@ -50,12 +52,14 @@ public class SecurityServiceImplTest {
         String RandomString = securityService.getAlphaNumericString(SECRET_LENGTH, false);
         CharacterIterator it = new StringCharacterIterator(RandomString);
         boolean verified = true;
-        while (it.current() != CharacterIterator.DONE && verified == true) {
+        while (it.current() != CharacterIterator.DONE && verified) {
             verified = CHARS.contains("" + it.current());
             it.next();
         }
         assertTrue(verified);
     }
+
+
 
 
 }

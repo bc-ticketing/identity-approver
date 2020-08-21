@@ -10,6 +10,8 @@ import org.web3j.utils.Numeric;
 
 import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Profile("!dev")
 @Service
@@ -27,9 +29,9 @@ public class SecurityServiceImpl implements SecurityService {
         }
         Sign.SignatureData sd = new Sign.SignatureData(
                 v,
-                (byte[]) Arrays.copyOfRange(signatureBytes, 0, 32),
-                (byte[]) Arrays.copyOfRange(signatureBytes, 32, 64));
-        String addressRecovered = null;
+                Arrays.copyOfRange(signatureBytes, 0, 32),
+                Arrays.copyOfRange(signatureBytes, 32, 64));
+        String addressRecovered;
         boolean match = false;
         // Iterate for each possible key to recover
         for (int i = 0; i < 4; i++) {
@@ -67,4 +69,5 @@ public class SecurityServiceImpl implements SecurityService {
         }
         return sb.toString();
     }
+
 }

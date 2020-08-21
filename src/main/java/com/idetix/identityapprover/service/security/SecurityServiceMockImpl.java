@@ -27,9 +27,9 @@ public class SecurityServiceMockImpl implements SecurityService {
         }
         Sign.SignatureData sd = new Sign.SignatureData(
                 v,
-                (byte[]) Arrays.copyOfRange(signatureBytes, 0, 32),
-                (byte[]) Arrays.copyOfRange(signatureBytes, 32, 64));
-        String addressRecovered = null;
+                Arrays.copyOfRange(signatureBytes, 0, 32),
+                Arrays.copyOfRange(signatureBytes, 32, 64));
+        String addressRecovered;
         boolean match = false;
         // Iterate for each possible key to recover
         for (int i = 0; i < 4; i++) {
@@ -65,4 +65,5 @@ public class SecurityServiceMockImpl implements SecurityService {
         }
         return sb.toString();
     }
+
 }

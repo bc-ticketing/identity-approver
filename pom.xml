@@ -81,6 +81,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
         </dependency>
+        <dependency>
+            <groupId>net.sourceforge.tess4j</groupId>
+            <artifactId>tess4j</artifactId>
+            <version>3.2.1</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -89,7 +94,6 @@
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
                 <excludes>
-                    <exclude>application-prod.yml</exclude>
                     <exclude>application.yml</exclude>
                 </excludes>
             </resource>
