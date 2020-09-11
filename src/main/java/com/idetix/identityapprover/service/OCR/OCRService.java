@@ -1,4 +1,4 @@
-package com.idetix.identityapprover.service.OCRService;
+package com.idetix.identityapprover.service.OCR;
 
 import com.idetix.identityapprover.entity.MRZ;
 import com.idetix.identityapprover.service.security.SecurityService;
@@ -23,14 +23,14 @@ public class OCRService {
         tesseract.setDatapath(tesseractDataPath);
     }
     @SneakyThrows
-    public String doOCR(File file){
+    public MRZ doOCR(File file){
         String ocrResult = tesseract.doOCR(file);
         MRZ mrz = new MRZ(ocrResult);
-        if (mrz.isValid()){
-            return mrz.getMrz();
+        if (mrz.getIsValid()){
+            return mrz;
         }
         else {
-            return "not a Valid MRZ";
+            return null;
         }
     }
 }

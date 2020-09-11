@@ -18,7 +18,7 @@ public class EmailIdentityController {
         return service.addEmailIdentity(eMail);
     }
 
-    @PostMapping("/validateEmailIdentity")
+    @PostMapping("/EmailIdentity")
     public EmailIdentity approveEmailIdentity(@RequestParam String eMail, @RequestParam String secret,
             @RequestParam String signedSecret, @RequestParam String ethAddress) {
 

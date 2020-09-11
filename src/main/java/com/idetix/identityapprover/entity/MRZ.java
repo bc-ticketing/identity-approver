@@ -1,15 +1,21 @@
 package com.idetix.identityapprover.entity;
 
 import com.idetix.identityapprover.service.security.SecurityService;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@AllArgsConstructor
 @Data
 public class MRZ {
-    private MRZType type;
-    private String mrz;
+    protected String idNumber;
+    protected MRZType type;
+    protected String mrz;
+    protected Boolean isValid;
+    protected Date date;
 
     public MRZ(String input){
         Pattern patternTD1 = Pattern.compile("(I|C|A).[A-Z0<]{3}[A-Z0-9]{1,9}<?[0-9O]{1}[A-Z0-9<]{14,22}\\n[0-9O]{7}(M|F|<)[0-9O]{7}[A-Z0<]{3}[A-Z0-9<]{11}[0-9O]\\n([A-Z0]+<)+<([A-Z0]+<)+<+", Pattern.CASE_INSENSITIVE);
@@ -39,11 +45,14 @@ public class MRZ {
             this.mrz = matcherSwissDriver.group().toUpperCase();
             this.type= MRZType.Swiss_Driving_License;
         }
+        this.isValid = this.isValid();
+        this.date = java.util.Calendar.getInstance().getTime();
     }
 
-    public boolean isValid() {
+    private boolean isValid() {
         if (this.type == MRZType.TD1) {
             String[] mrzParts = mrz.split("\n");
+            this.idNumber = mrzParts[0].substring(0,14);
             String authNum = mrzParts[0].substring(5, 9);
             String conNum = mrzParts[0].substring(9, 14);
             String proof1 = mrzParts[0].substring(14, 15);
