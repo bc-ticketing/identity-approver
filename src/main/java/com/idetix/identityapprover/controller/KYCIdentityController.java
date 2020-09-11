@@ -36,25 +36,4 @@ public class KYCIdentityController {
         return kycIdentityService.verifyKYCIdentity(mrz, signature, ethAddress);
     }
 
-
-
-
-//    @SneakyThrows
-//    @PostMapping("/DoOCR")
-//    public String getOCRresult(@RequestParam("file") MultipartFile multipartFile){
-//        File convFile = new File(System.getProperty("java.io.tmpdir")+"/"+multipartFile.getOriginalFilename());
-//        multipartFile.transferTo(convFile);
-//        return ocrService.doOCR(convFile);
-//    }
-//
-//    @SneakyThrows
-//    @PostMapping("/CompareFaces")
-//    public boolean areFacesSamePerson(@RequestParam("source") MultipartFile source, @RequestParam("target") MultipartFile target){
-//        Image sourceImage = new Image().withBytes(ByteBuffer.wrap(source.getBytes()));
-//        Image targetImage = new Image().withBytes(ByteBuffer.wrap(target.getBytes()));
-//
-//        return awsService.doFacesMatch(sourceImage,targetImage);
-//
-//    }
-
 }
