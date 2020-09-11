@@ -54,14 +54,21 @@ spring:
                     starttls:
                         enable: true
                         required: true
-
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+aws:
+  similarityThreshold: *wanted Similarity*
+  access-key: *AWS KEY*
+  secret-key: *AWS Secret*
 twilioAccountSid: *Twilio Account Sid*
 twilioAuthToken: *Twilio Auth Token*
 twiliophoneNumber: *Twilio Phone Number*
 IdentityContractAddress: *'Address of Identity Contract'*
 BlockchainPath: *HTTP Addres used to connect to Eth Net*
-BlockchainWalletPath: *Path to Wallet File*
-BlockchainWalletPSWD: *Wallet Password*
+BlockchainPrivatKey: *Private Key of Approver Account*
+TesseractDataPath: *Path to Teseract OCR Model for Image Processing*
 server:
     port: *Port you want to Serv*
 ```
