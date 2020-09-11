@@ -16,6 +16,12 @@ To Send Emails, you need access to a Mailserver. The credential have to be speci
 
 To Send SMS, the Services of [Twillio](https://www.twilio.com/sms) are used. Therefore you need to create an Account with Twillio. Add your Tokens to the application.yml file.
 
+### Validating Person with ID Card and Selfie
+
+To Validate the MRZ of the ID Card, Teseract is used. Pleas specify the path of the Tesseract Model.
+To check, if the Selfie and the picture on the ID is from the same Person, AWS Rekognition is used.
+Provide the AWS User credentials in the Application.yml file.
+
 ### Database
 
 As Database, you can use any Database, just specify it in the application.yml file
