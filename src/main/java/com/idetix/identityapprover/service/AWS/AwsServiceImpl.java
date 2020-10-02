@@ -5,15 +5,14 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.rekognition.AmazonRekognition;
 import com.amazonaws.services.rekognition.AmazonRekognitionClientBuilder;
-import com.amazonaws.services.rekognition.model.CompareFacesMatch;
-import com.amazonaws.services.rekognition.model.CompareFacesRequest;
-import com.amazonaws.services.rekognition.model.CompareFacesResult;
-import com.amazonaws.services.rekognition.model.Image;
+import com.amazonaws.services.rekognition.model.*;
+import com.idetix.identityapprover.entity.MRZ;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.List;
 
 @Profile("!dev")
@@ -49,5 +48,24 @@ public class AwsServiceImpl implements AwsService {
 
         List<CompareFacesMatch> faceDetails = compareFacesResult.getFaceMatches();
         return faceDetails.size() > 0;
+    }
+
+    @Override
+    public MRZ doOCR(Image source) {
+        String detectedText = new String();
+        DetectTextRequest request = new DetectTextRequest().withImage(source);
+
+        DetectTextResult result = amazonRekognition.detectText(request);
+        List<TextDetection> textDetections = result.getTextDetections();
+        for( TextDetection text: textDetections) {
+            detectedText = detectedText + text.getDetectedText();
+        }
+        MRZ mrz = new MRZ(detectedText);
+        if (mrz.getIsValid()){
+            return mrz;
+        }
+        else {
+            return null;
+        }
     }
 }

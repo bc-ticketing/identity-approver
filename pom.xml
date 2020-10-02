@@ -84,7 +84,7 @@
         <dependency>
             <groupId>net.sourceforge.tess4j</groupId>
             <artifactId>tess4j</artifactId>
-            <version>4.5.1</version>
+            <version>4.4.1</version>
         </dependency>
         <dependency>
             <groupId>com.amazonaws</groupId>
@@ -99,6 +99,7 @@
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
                 <excludes>
+                    <exclude>/OCR/</exclude>
                     <exclude>application.yml</exclude>
                     <exclude>application-prod.yml</exclude>
                     <!--<exclude>application-prod.yml</exclude>-->

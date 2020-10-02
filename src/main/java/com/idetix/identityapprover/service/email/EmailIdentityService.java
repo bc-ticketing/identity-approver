@@ -1,6 +1,8 @@
 package com.idetix.identityapprover.service.email;
 
 import com.idetix.identityapprover.entity.EmailIdentity;
+import com.idetix.identityapprover.entity.Exceptions.SignatureMismatchException;
+import com.idetix.identityapprover.entity.Exceptions.BlockChainWriteFailedException;
 import com.idetix.identityapprover.repository.EmailIdentityRepository;
 import com.idetix.identityapprover.service.blockchain.BlockchainService;
 import com.idetix.identityapprover.service.security.SecurityService;
@@ -47,7 +49,7 @@ public class EmailIdentityService {
     // Method to verify the EMail address and make it final in the database.
     // When the provided secret corresponds with the secret on the database, the provided signature is correct
     // for the secret and ETH address, the identity gets verified on the Blockchain and is set to verified on the database.
-    public EmailIdentity verifyEmailIdentity(String eMail, String ethAddress, String secret, String signedSecret) {
+    public EmailIdentity verifyEmailIdentity(String eMail, String ethAddress, String secret, String signedSecret) throws SignatureMismatchException, BlockChainWriteFailedException {
         EmailIdentity emailIdentity = getEmailIdentityById(eMail);
         if (emailIdentity.getSecret().contentEquals(secret) &&
                 securityService.verifyAddressFromSignature(ethAddress, signedSecret, secret)) {
@@ -57,9 +59,14 @@ public class EmailIdentityService {
                     emailIdentity.setEthAddress(ethAddress);
                     updateEmailIdentity(emailIdentity);
                 }
+                else{
+                throw new BlockChainWriteFailedException("could not write to Blockchain");
+                }
             }
         }
-
+        else{
+            throw new SignatureMismatchException("provided Secret does not correspond to Signature provided");
+        }
         return emailIdentity;
     }
 

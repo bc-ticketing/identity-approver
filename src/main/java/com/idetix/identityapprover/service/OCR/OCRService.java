@@ -1,27 +1,27 @@
 package com.idetix.identityapprover.service.OCR;
 
-import com.idetix.identityapprover.entity.MRZ;
-import com.idetix.identityapprover.service.security.SecurityService;
-import lombok.SneakyThrows;
-import net.sourceforge.tess4j.Tesseract1;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+        import com.idetix.identityapprover.entity.MRZ;
+        import com.idetix.identityapprover.service.security.SecurityService;
+        import lombok.SneakyThrows;
+        import net.sourceforge.tess4j.Tesseract;
+        import org.springframework.beans.factory.annotation.Autowired;
+        import org.springframework.beans.factory.annotation.Value;
+        import org.springframework.stereotype.Service;
 
-import java.io.File;
+        import java.io.File;
 
 @Service
 public class OCRService {
-    final Tesseract1 tesseract;
+    final Tesseract tesseract;
 
     @Autowired
     private SecurityService securityService;
 
     @Autowired
     public OCRService(@Value("${TesseractDataPath}") String tesseractDataPath){
-        tesseract = new Tesseract1();
-        System.out.println(tesseractDataPath);
+        tesseract = new Tesseract();
         tesseract.setDatapath(tesseractDataPath);
+        tesseract.setLanguage("eng");
     }
     @SneakyThrows
     public MRZ doOCR(File file){
