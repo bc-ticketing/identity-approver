@@ -1,5 +1,7 @@
 package com.idetix.identityapprover.service.phone;
 
+import com.idetix.identityapprover.entity.Exceptions.BlockChainWriteFailedException;
+import com.idetix.identityapprover.entity.Exceptions.SignatureMismatchException;
 import com.idetix.identityapprover.entity.PhoneIdentity;
 import com.idetix.identityapprover.repository.PhoneIdentityRepository;
 import com.idetix.identityapprover.service.blockchain.BlockchainService;
@@ -47,7 +49,7 @@ public class PhoneIdentityService {
     // Method to verify the EMail address and make it final in the database.
     // When the provided secret corresponds with the secret on the database, the provided signature is correct
     // for the secret and ETH address, the identity gets verified on the Blockchain and is set to verified on the database.
-    public PhoneIdentity verifyPhoneIdentity(String phoneNr, String ethAddress, String secret, String signedSecret) {
+    public PhoneIdentity verifyPhoneIdentity(String phoneNr, String ethAddress, String secret, String signedSecret) throws SignatureMismatchException, BlockChainWriteFailedException {
         PhoneIdentity phoneIdentity = getPhoneIdentityById(phoneNr);
         if (phoneIdentity.getSecret().contentEquals(secret) &&
                 securityService.verifyAddressFromSignature(ethAddress, signedSecret, secret)) {
@@ -57,7 +59,13 @@ public class PhoneIdentityService {
                     phoneIdentity.setEthAddress(ethAddress);
                     updatePhoneIdentity(phoneIdentity);
                 }
+                else {
+                    throw new BlockChainWriteFailedException("could not write to Blockchain");
+                }
             }
+        }
+        else{
+            throw new SignatureMismatchException("provided Secret does not correspond to Signature provided");
         }
         return phoneIdentity;
     }

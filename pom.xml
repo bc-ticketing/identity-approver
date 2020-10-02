@@ -99,7 +99,6 @@
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
                 <excludes>
-                    <exclude>/OCR/</exclude>
                     <exclude>application.yml</exclude>
                     <exclude>application-prod.yml</exclude>
                     <!--<exclude>application-prod.yml</exclude>-->

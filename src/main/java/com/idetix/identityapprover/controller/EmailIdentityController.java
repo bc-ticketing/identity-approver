@@ -30,10 +30,10 @@ public class EmailIdentityController {
         }
         catch (SignatureMismatchException exc){
             throw new ResponseStatusException(
-                    HttpStatus.NOT_ACCEPTABLE, "Provided Signature does not match", exc);
+                    HttpStatus.NOT_FOUND, "Provided Signature does not match", exc);
         } catch (BlockChainWriteFailedException exc) {
             throw new ResponseStatusException(
-                    HttpStatus.NOT_MODIFIED, "Blockchain write Failed", exc);
+                    HttpStatus.NOT_FOUND, "Blockchain write Failed", exc);
         }
     }
 
