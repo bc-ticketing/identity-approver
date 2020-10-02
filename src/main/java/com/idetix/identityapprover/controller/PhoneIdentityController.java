@@ -18,7 +18,7 @@ public class PhoneIdentityController {
         return service.addPhoneIdentity("+" + phoneNr);
     }
 
-    @PostMapping("/validatePhoneIdentity")
+    @PostMapping("/PhoneIdentity")
     public PhoneIdentity approvePhoneIdentity(@RequestParam String phoneNr, @RequestParam String secret,
             @RequestParam String signedSecret, @RequestParam String ethAddress) {
 

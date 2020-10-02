@@ -31,7 +31,7 @@ public class KYCIdentityController {
         return kycIdentityService.addKYCIdentity(frontImage,selfieImage,mrzFile);
     }
 
-    @PostMapping("/validateKYCIdentity")
+    @PostMapping("/KYCIdentity")
     public KYCIdentity approveKYCIdentity(@RequestParam MRZ mrz,@RequestParam String signature, @RequestParam String ethAddress){
         return kycIdentityService.verifyKYCIdentity(mrz, signature, ethAddress);
     }

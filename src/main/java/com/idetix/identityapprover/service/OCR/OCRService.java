@@ -20,6 +20,7 @@ public class OCRService {
     @Autowired
     public OCRService(@Value("${TesseractDataPath}") String tesseractDataPath){
         tesseract = new Tesseract1();
+        System.out.println(tesseractDataPath);
         tesseract.setDatapath(tesseractDataPath);
     }
     @SneakyThrows
