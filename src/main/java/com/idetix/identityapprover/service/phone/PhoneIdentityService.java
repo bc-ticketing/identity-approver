@@ -1,6 +1,8 @@
 package com.idetix.identityapprover.service.phone;
 
 import com.idetix.identityapprover.entity.Exceptions.BlockChainWriteFailedException;
+import com.idetix.identityapprover.entity.Exceptions.IdentityNotFoundException;
+import com.idetix.identityapprover.entity.Exceptions.SecretMismatchException;
 import com.idetix.identityapprover.entity.Exceptions.SignatureMismatchException;
 import com.idetix.identityapprover.entity.PhoneIdentity;
 import com.idetix.identityapprover.repository.PhoneIdentityRepository;
@@ -49,8 +51,11 @@ public class PhoneIdentityService {
     // Method to verify the EMail address and make it final in the database.
     // When the provided secret corresponds with the secret on the database, the provided signature is correct
     // for the secret and ETH address, the identity gets verified on the Blockchain and is set to verified on the database.
-    public PhoneIdentity verifyPhoneIdentity(String phoneNr, String ethAddress, String secret, String signedSecret) throws SignatureMismatchException, BlockChainWriteFailedException {
+    public PhoneIdentity verifyPhoneIdentity(String phoneNr, String ethAddress, String secret, String signedSecret) throws IdentityNotFoundException, SecretMismatchException,SignatureMismatchException, BlockChainWriteFailedException {
         PhoneIdentity phoneIdentity = getPhoneIdentityById(phoneNr);
+        if (phoneIdentity == null){
+            throw new IdentityNotFoundException("The Provided Identity does not exist");
+        }
         if (phoneIdentity.getSecret().contentEquals(secret) &&
                 securityService.verifyAddressFromSignature(ethAddress, signedSecret, secret)) {
             if (blockchainService.getSecurityLevelForAddress(ethAddress) < 2) {
@@ -64,8 +69,11 @@ public class PhoneIdentityService {
                 }
             }
         }
-        else{
+        else if (securityService.verifyAddressFromSignature(ethAddress, signedSecret, secret)){
             throw new SignatureMismatchException("provided Secret does not correspond to Signature provided");
+        }
+        else if (phoneIdentity.getSecret().contentEquals(secret)){
+            throw new SecretMismatchException("provided Secret does not match the sent Secret");
         }
         return phoneIdentity;
     }

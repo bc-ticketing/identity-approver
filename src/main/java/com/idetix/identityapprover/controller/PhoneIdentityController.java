@@ -1,6 +1,8 @@
 package com.idetix.identityapprover.controller;
 
 import com.idetix.identityapprover.entity.Exceptions.BlockChainWriteFailedException;
+import com.idetix.identityapprover.entity.Exceptions.IdentityNotFoundException;
+import com.idetix.identityapprover.entity.Exceptions.SecretMismatchException;
 import com.idetix.identityapprover.entity.Exceptions.SignatureMismatchException;
 import com.idetix.identityapprover.entity.PhoneIdentity;
 import com.idetix.identityapprover.service.phone.PhoneIdentityService;
@@ -34,6 +36,14 @@ public class PhoneIdentityController {
         } catch (BlockChainWriteFailedException exc) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "Blockchain write Failed", exc);
+        }
+        catch (SecretMismatchException exc){
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Provided Secret did not match the sent one", exc);
+        }
+        catch (IdentityNotFoundException exc){
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "The Provided Identity does not exist", exc);
         }
     }
 

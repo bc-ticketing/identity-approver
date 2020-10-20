@@ -39,7 +39,7 @@ public class SecurityServiceImpl implements SecurityService {
                     msgHash);
             if (publicKey != null) {
                 addressRecovered = "0x" + Keys.getAddress(publicKey);
-                if (addressRecovered.equals(address)) {
+                if (addressRecovered.equals(address.toLowerCase())) {
                     match = true;
                     break;
                 }
