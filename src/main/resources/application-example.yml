@@ -34,7 +34,7 @@ aws:
 twilioAccountSid: *Twilio Account Sid*
 twilioAuthToken: *Twilio Auth Token*
 twiliophoneNumber: *Twilio Phone Number*
-IdentityContractAddress: *'Address of Identity Contract'*
+IDENTITY_ADDRESS: *'Address of Identity Contract'*
 BlockchainPath: *HTTP Addres used to connect to Eth Net*
 BlockchainPrivatKey: *Private Key of Approver Account*
 TesseractDataPath: *Path to Teseract OCR Model for Image Processing*

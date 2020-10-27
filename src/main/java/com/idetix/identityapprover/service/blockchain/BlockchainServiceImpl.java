@@ -41,7 +41,7 @@ public class BlockchainServiceImpl implements BlockchainService {
     public BlockchainServiceImpl(
             @Value("${BlockchainPath}") String blockchainPath,
             @Value("${BlockchainPrivatKey}") String privateKey,
-            @Value("${IdentityContractAddress}") String contractAddress) {
+            @Value("${IDENTITY_ADDRESS}") String contractAddress) {
         web3 = Web3j.build(new HttpService(blockchainPath));
         credentials = Credentials.create(privateKey);
         this.contractAddress = contractAddress;
