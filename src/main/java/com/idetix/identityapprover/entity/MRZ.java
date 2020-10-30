@@ -22,6 +22,12 @@ public class MRZ {
         Matcher matcherTD1 = patternTD1.matcher(input);
         if( matcherTD1.find()){
             this.mrz = matcherTD1.group().toUpperCase();
+            StringBuilder fixedMrz = new StringBuilder(this.mrz);
+            char ch = '<';
+            for (int i = 15; i < 30; i++){
+                fixedMrz.setCharAt(i, ch);
+            }
+            this.mrz = fixedMrz.toString();
             this.type= MRZType.TD1;
         }
 

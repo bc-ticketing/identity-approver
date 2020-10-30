@@ -38,7 +38,7 @@ public class KYCIdentityService {
             return mrz;
         }
         if (awsService.doFacesMatch(source,target)){
-            KYCIdentity kycIdentity = getKYCIdentityById(mrz.getMrz());
+            KYCIdentity kycIdentity = repository.findById(mrz.getMrz()).orElse(null);
             if (kycIdentity == null){
                 kycIdentity = new KYCIdentity(mrz.getMrz(),mrz.getIdNumber(),mrz.getType(),mrz.getIsValid(),mrz.getDate(),null ,false);
                 repository.save(kycIdentity);
@@ -82,7 +82,7 @@ public class KYCIdentityService {
     private KYCIdentity getKYCIdentityById(String mrz) {
         KYCIdentity kycIdentity = repository.findById(mrz).orElse(null);
         if (kycIdentity == null) {
-            throw new IllegalArgumentException("The repository does not contain an EMail identity for the EMail" +
+            throw new IllegalArgumentException("The repository does not contain an KYC identity for the MRZ" +
                     " `" + mrz + "`.");
         }
         return kycIdentity;

@@ -21,7 +21,7 @@ public class OCRService {
     public OCRService(@Value("${TesseractDataPath}") String tesseractDataPath){
         tesseract = new Tesseract();
         tesseract.setDatapath(tesseractDataPath);
-        tesseract.setLanguage("eng");
+        //tesseract.setLanguage("eng");
     }
     @SneakyThrows
     public MRZ doOCR(File file){
