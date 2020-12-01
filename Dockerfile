@@ -1,6 +1,6 @@
 # Build Stage for Spring boot application image
 FROM openjdk:8-jdk-alpine as build
-
+ENV LC_ALL=C
 WORKDIR /app
 
 COPY mvnw .
@@ -21,13 +21,15 @@ RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
 # Production Stage for Spring boot application image
 FROM openjdk:8-jre-alpine as production
 ARG DEPENDENCY=/app/target/dependency
+ENV LC_ALL=C
 
+RUN apk update
 
-RUN apk add --no-cache tesseract-ocr
+RUN apk add --no-cache tesseract-ocr -y
 
 # Download last language package
 RUN mkdir -p /usr/share/tessdata
-ADD https://github.com/tesseract-ocr/tessdata/raw/master/eng.traineddata /usr/share/tessdata/eng.traineddata
+ADD https://github.com/tesseract-ocr/tessdata_fast/raw/master/eng.traineddata /usr/share/tessdata/eng.traineddata
 
 RUN tesseract --list-langs
 RUN tesseract -v
