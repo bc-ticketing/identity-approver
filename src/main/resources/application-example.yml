@@ -1,0 +1,42 @@
+spring:
+  datasource:
+    driver-class-name:
+    url: *Databse-Url*
+    username: *Username*
+    password: *Password*
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+      properties:
+        hibernate:
+          dialect: org.hibernate.dialect.MySQL5Dialect
+  mail:
+    host: *host*
+    port: *port*
+    username: *mail username*
+    password: *mail password*
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+aws:
+  similarityThreshold: *wanted Similarity*
+  access-key: *AWS KEY*
+  secret-key: *AWS Secret*
+twilioAccountSid: *Twilio Account Sid*
+twilioAuthToken: *Twilio Auth Token*
+twiliophoneNumber: *Twilio Phone Number*
+IDENTITY_ADDRESS: *'Address of Identity Contract'*
+BlockchainPath: *HTTP Addres used to connect to Eth Net*
+BlockchainPrivatKey: *Private Key of Approver Account*
+TesseractDataPath: *Path to Teseract OCR Model for Image Processing*
+server:
+  port: *Port you want to Serv*
