@@ -3,6 +3,7 @@ package com.idetix.identityapprover.service.KYC;
 import com.amazonaws.services.rekognition.model.Image;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.idetix.identityapprover.entity.EmailIdentity;
+import com.idetix.identityapprover.entity.Exceptions.MRZException;
 import com.idetix.identityapprover.entity.KYCIdentity;
 import com.idetix.identityapprover.entity.MRZ;
 import com.idetix.identityapprover.entity.MRZType;
@@ -31,11 +32,11 @@ public class KYCIdentityService {
     @Autowired
     private BlockchainService blockchainService;
 
-    public MRZ addKYCIdentity(Image source, Image target, File mrzSource) {
+    public MRZ addKYCIdentity(Image source, Image target, File mrzSource) throws MRZException {
         MRZ mrz = ocrService.doOCR(mrzSource);
 //        Input ist kein Foto von MRZ
         if (mrz == null){
-            return mrz;
+            throw new MRZException("Provided Foto is not a Picture of MRZ or OCR failed");
         }
         if (awsService.doFacesMatch(source,target)){
             KYCIdentity kycIdentity = repository.findById(mrz.getMrz()).orElse(null);
