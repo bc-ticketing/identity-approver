@@ -35,7 +35,7 @@ public class KYCIdentityService {
     public MRZ addKYCIdentity(Image source, Image target, File mrzSource) throws MRZException {
         MRZ mrz = ocrService.doOCR(mrzSource);
 //        Input ist kein Foto von MRZ
-        if (mrz == null){
+        if (mrz == null  || !mrz.getIsValid()){
             throw new MRZException("Provided Foto is not a Picture of MRZ or OCR failed");
         }
         if (awsService.doFacesMatch(source,target)){
@@ -45,7 +45,7 @@ public class KYCIdentityService {
                 repository.save(kycIdentity);
             }else{
                 if(kycIdentity.getVerified()){
-                    return null;
+                    throw new MRZException("Provided Foto is not a Picture of MRZ or OCR failed");
                 }else{
                     kycIdentity = new KYCIdentity(mrz.getMrz(),mrz.getIdNumber(),mrz.getType(),mrz.getIsValid(),mrz.getDate(),null ,false);
                     repository.save(kycIdentity);
